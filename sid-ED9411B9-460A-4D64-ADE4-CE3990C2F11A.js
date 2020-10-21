@@ -65,19 +65,24 @@ for (var i = 0; i < myJson.length; i++) {
             k.sh = myJson[i][key]
         }
     }
+    
     Number.prototype.countDecimals = function () {
     if(Math.floor(this.valueOf()) === this.valueOf()) return 0;
         return this.toString().split(".")[1].length || 0; 
     }
     var priceCheckLengthDecimal = parseFloat(myJson[i].price)
-    
+
     myJson[i].SellingPrice = (parseFloat(myJson[i].shipping) + parseFloat(myJson[i].price)).toFixed(priceCheckLengthDecimal.countDecimals())
     k.si = (parseFloat((myJson[i].interest)) * k.sd * parseFloat(k.c) / 365 / 100).toFixed(2)
     if (parseFloat(k.si) === 0) {
         k.si = "0"
     }
     calProfit = (parseFloat(k.pi) - parseFloat(k.c) - k.si - parseFloat(k.ei))
-    k.pr = calProfit.toFixed(priceCheckLengthDecimal.countDecimals())
+    if(priceCheckLengthDecimal.countDecimals() == 0){
+        k.pr = calProfit.toFixed(2)
+    }else{
+        k.pr = calProfit.toFixed(priceCheckLengthDecimal.countDecimals())
+    }
     if (parseFloat(calProfit.toFixed(2)) === 0) {
         k.pr = "0"
     }
@@ -91,6 +96,7 @@ for (var i = 0; i < myJson.length; i++) {
     }
     l[i] = k
     k = {}
+    
 }
 execution.setVariable("profit", profit)
 execution.setVariable("p_id", product_id)
@@ -163,4 +169,5 @@ if (execution.getVariable("pttor_effective_date")) {
 } else {
     execution.setVariable("p_date", "")
 }
+
 
